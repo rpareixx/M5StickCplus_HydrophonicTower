@@ -23,6 +23,11 @@ jobs:
     - name: Install PlatformIO
       run: pip install --upgrade platformio
 
+    - name: Decode base64 secrets
+      run: echo $SECRETS_FILE_CONTENT | base64 -d > src/secrets.h
+      env:
+        SECRETS_FILE_CONTENT: ${{ secrets.SECRETS_FILE_CONTENT }}
+
     - name: Compile Firmware
       run: pio run -e ${{ env.TARGET }}
     - name: Upload Firmware
