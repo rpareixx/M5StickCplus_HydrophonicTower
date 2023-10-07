@@ -1,7 +1,6 @@
 // To Do's
-// - handle secrets / secret file:
-// https://www.andreagrandi.it/2020/12/16/how-to-safely-store-arduino-secrets/
 // - time-server approach
+// WiFi configurieren
 
 #include <Arduino.h>
 #include <M5StickCPlus.h>
