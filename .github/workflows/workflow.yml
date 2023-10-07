@@ -1,0 +1,61 @@
+name: Release
+
+on:
+  push:
+    tags: [v*]
+
+jobs:
+  build:
+    name: Compile web flash
+    runs-on: ubuntu-latest
+
+    permissions:
+      pages: write
+      id-token: write
+      contents: read
+
+    environment:
+      name: github-pages
+      url: '${{ steps.deployment.outputs.page_url }}'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install Arduino CLI
+        uses: arduino/setup-arduino-cli@v1
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v2
+
+      - name: Install dependencies
+        run: npm install --no-audit
+
+      - name: Build the app
+        run: npm run -w app build
+
+      - name: Setup arduino
+        run: ./bin/esp32.sh
+
+      - name: Compile firmware
+        run: ./bin/esp32.sh
+
+      - name: Build the flash tool
+        run: npm run -w web_flash build
+        env:
+          NODE_ENV: production
+
+      - name: Upload pages artifacts
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: web_flash/dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
