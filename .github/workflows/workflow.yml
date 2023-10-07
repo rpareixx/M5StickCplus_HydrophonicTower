@@ -49,10 +49,10 @@ jobs:
  #       run: npm run app build --workspaces --if-present
 
       - name: Setup arduino
-        run: ./ci/setup.sh
+        run: .github/workflows/ci/setup.sh
 
       - name: Compile firmware
-        run: ./build.sh
+        run: .github/workflows/ci/build.sh
 
       - name: Build the flash tool
         run: npm run -w web_flash build
