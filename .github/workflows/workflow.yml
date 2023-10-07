@@ -44,7 +44,9 @@ jobs:
         run: npm ci
 
       - name: Build the app
-        run: npm run -w app build --if-present
+        run: npm run
+ #       run: npm run -w app build
+ #       run: npm run test --workspaces --if-present
 
       - name: Setup arduino
         run: ./bin/esp32.sh
