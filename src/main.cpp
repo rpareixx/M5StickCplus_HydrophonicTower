@@ -1,6 +1,6 @@
 // To Do's
 // - time-server approach
-// WiFi configurieren
+// WiFi reconnect configurieren
 
 #include <Arduino.h>
 #include <M5StickCPlus.h>
@@ -12,14 +12,15 @@ char password[] = SECRET_CASTEL_PASS;
 
 #define CONNECTION_TIMEOUT 10
 
-IPAddress ip(192, 168, 1, 48);
-IPAddress dns(192, 168, 0, 1);
+IPAddress local_IP(192, 168, 1, 48);
+IPAddress primaryDNS(8, 8, 8, 8);    // optional
+IPAddress secondaryDNS(8, 8, 4, 4);  // optional
 IPAddress gateway(192, 168, 0, 1);
 IPAddress subnet(255, 255, 254, 1);
 
 void get_network_info() {
     if (WiFi.status() == WL_CONNECTED) {
-        Serial.print("[*] Network information for ");
+        Serial.println("[*] Network information for ");
         Serial.println(ssid);
 
         Serial.println("[+] BSSID : " + WiFi.BSSIDstr());
@@ -37,28 +38,37 @@ void setup() {
     M5.begin();
     M5.Lcd.setRotation(3);
 
+    // Configures static IP address
+    if (!WiFi.config(local_IP, gateway, subnet, primaryDNS, secondaryDNS)) {
+        Serial.println("STA Failed to configure");
+    }
+
     WiFi.mode(WIFI_STA);  // Optional
     WiFi.begin(ssid, password);
     Serial.println("\nConnecting");
 
     int timeout_counter = 0;
 
+    // Connect to Wi-Fi network with SSID and password
+    Serial.print("Connecting to ");
+    Serial.println(ssid);
+    WiFi.begin(ssid, password);
     while (WiFi.status() != WL_CONNECTED) {
-        Serial.print(".");
         delay(200);
+        Serial.print(".");
         timeout_counter++;
         if (timeout_counter >= CONNECTION_TIMEOUT * 5) {
             ESP.restart();
         }
     }
 
-    Serial.println("\nConnected to the WiFi network");
-    M5.Lcd.println("\nConnected to the WiFi network");
-    Serial.print("Local ESP32 IP: ");
-    M5.Lcd.print("Local ESP32 IP: ");
-    Serial.println(WiFi.localIP());
-    M5.Lcd.println(WiFi.localIP());
+    // Display Wifi Status in terminal
     get_network_info();
+
+    // Display Wifi Status on M5Stick Display
+    M5.Lcd.println("\nConnected to the WiFi network");
+    M5.Lcd.print("Local ESP32 IP: ");
+    M5.Lcd.println(WiFi.localIP());
 }
 
 void loop() {
