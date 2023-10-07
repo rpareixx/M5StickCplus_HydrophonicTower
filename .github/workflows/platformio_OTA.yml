@@ -2,7 +2,7 @@ name: Platformio_OTA
 on: [workflow_dispatch, push]
 
 env:
-  TARGET: nodemcu-32s # Must match the value after colon in platformio.ini (line 4: [env:nodemcu-32s])
+  TARGET: m5stick-c-plus # Must match the value after colon in platformio.ini (line 4: [env:nodemcu-32s])
 jobs:
   build:
     runs-on: ubuntu-latest
