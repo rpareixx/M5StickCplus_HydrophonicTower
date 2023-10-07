@@ -44,15 +44,15 @@ jobs:
         run: npm ci
 
       - name: Build the app
-        run: npm run build
+        run: npm run
  #       run: npm run -w app build
  #       run: npm run app build --workspaces --if-present
 
       - name: Setup arduino
-        run: ./bin/esp32.sh
+        run: ./ci/setup.sh
 
       - name: Compile firmware
-        run: ./bin/esp32.sh
+        run: ./build.sh
 
       - name: Build the flash tool
         run: npm run -w web_flash build
