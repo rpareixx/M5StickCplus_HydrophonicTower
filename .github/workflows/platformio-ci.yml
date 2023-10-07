@@ -1,0 +1,41 @@
+# Quelle secrets handling: https://stackoverflow.com/questions/67964110/how-to-access-secrets-when-using-flutter-web-with-github-actions
+# Verschlüsselte secret.h erstellen: https://base64.guru/converter/encode/file
+# Alternative Quelle: https://damienaicheh.github.io/github/actions/2021/04/15/environment-variables-secrets-github-actions-en.html
+
+
+name: PlatformIO CI
+
+on:
+    push:
+      branches: [ main, dev ]
+    pull_request:
+      branches: [ main ]
+  
+    # Allows to run this workflow manually from the Actions tab
+    workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/pip
+            ~/.platformio/.cache
+          key: ${{ runner.os }}-pio
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install PlatformIO Core
+        run: pip install --upgrade platformio
+      - name: Decode base64 secrets
+        run: echo $SECRETS_FILE_CONTENT | base64 -d > src/secrets.h
+        env:
+          SECRETS_FILE_CONTENT: ${{ secrets.SECRETS_FILE_CONTENT }}
+      - name: Install Atmel AVR platform
+        run: pio platform install "espressif32"
+      - name: Build PlatformIO Project
+        run: pio run -e m5stick-c-plus

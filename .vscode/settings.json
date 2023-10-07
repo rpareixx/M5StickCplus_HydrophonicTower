@@ -1,0 +1,5 @@
+{
+    "C_Cpp.errorSquiggles": "disabled",
+    "cmake.configureOnOpen": true,
+    "clang-format.executable": "/opt/homebrew/Cellar/clang-format/17.0.2/bin"
+}
