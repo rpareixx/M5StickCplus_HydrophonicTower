@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/bash  
 
 ESP_VERSION=${ESP_VERSION:-1.0.6}
 SPIFFS_VERSION=${SPIFFS_VERSION:-0.2.3}
