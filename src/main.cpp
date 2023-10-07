@@ -13,13 +13,13 @@
 
 // This string should correspond to github tag used for Releasing (via. Github
 // Actions)
-#define VERSION "0.0.1"
+#define VERSION "0.0.2"
 
 #define RELEASE_URL                                                       \
     "https://github.com/rpareixx/M5StickCplus_HydrophonicTower/releases/" \
     "latest"
 
-#define DELAY_MS 1000
+#define DELAY_MS 500
 
 char ssid[] = SECRET_CASTEL_SSID;
 char password[] = SECRET_CASTEL_PASS;
